@@ -4,11 +4,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
-from vege.views import login_user, register_user, receipes, delete_receipe, update_receipe, about, success_page, confirm_logout
+from vege.views import *
+from home.views import *
 
 urlpatterns = [
+    path('', home, name="home"),
+    path('contact/', contact, name="contact"),
     path('admin/', admin.site.urls),
-    path('', receipes, name="receipes"),  # Default route points to the recipe page
+ path('receipes/', receipes, name="receipes"),# Default route points to the recipe page
     path('login/', login_user, name="login"),
     path('register/', register_user, name="register"),
     path('logout/', LogoutView.as_view(next_page='login'), name="logout"),

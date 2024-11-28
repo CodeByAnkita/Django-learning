@@ -9,36 +9,32 @@ from .forms import RegisterForm, LoginForm
 def about(request):
     return render(request, 'about.html')
 def register_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Account created successfully!')
-            return redirect('login')
+            messages.success(request, "Registration successful! Redirecting to receipes...")
+            return redirect('receipes')
         else:
-            messages.error(request, 'Registration failed. Please correct the errors.')
+            messages.error(request, "Error in form submission. Please try again.")
     else:
         form = RegisterForm()
-
-    return render(request, 'register.html', {'form': form})
+    
+    return render(request, "register.html", {"form": form})
 
 def login_user(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, f'Welcome {user.username}!')
-                return redirect('receipes')
-            else:
-                messages.error(request, 'Invalid username or password.')
-    else:
-        form = LoginForm()
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('receipes')  # Redirect to receipes page after login
+        else:
+            messages.error(request, "Invalid username or password.")
+    
+    return render(request, "login.html")
 
-    return render(request, 'login.html', {'form': form})
 
 def confirm_logout(request):
     if request.method == "POST":
