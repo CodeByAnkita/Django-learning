@@ -1,0 +1,76 @@
+<!-- Core/vege/templates/receipe.html -->
+{% extends "base.html" %}
+
+{% block start %}
+<div class="container mt-5">
+    <h1>Welcome, {{ username }}</h1>
+    <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+
+    <!-- Form to Add Recipe -->
+    <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Add Recipe</h2>
+        <div class="mb-3">
+            <label for="receipeName" class="form-label">Recipe Name</label>
+            <input required type="text" name="receipe_name" class="form-control" id="receipeName">
+        </div>
+        <div class="mb-3">
+            <label for="receipeDescription" class="form-label">Recipe Description</label>
+            <textarea class="form-control" name="receipe_description" id="receipeDescription" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="receipeImage" class="form-label">Recipe Image</label>
+            <input type="file" name="receipe_image" class="form-control" id="receipeImage">
+        </div>
+        <button type="submit" class="btn btn-success">Add Recipe</button>
+    </form>
+      <!-- Search Bar -->
+      <form method="get" class="mb-3 mt-5">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search Recipe" value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <!-- Displaying All Recipes -->
+    <div class="container mt-5">
+        <h2>All Recipes</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Recipe Name</th>
+                    <th>Recipe Description</th>
+                    <th>Recipe Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in receipes %}
+                <tr>
+                    <td>{{ recipe.receipe_name }}</td>
+                    <td>{{ recipe.receipe_description|slice:":200" }}</td>
+                    <td>
+                        {% if recipe.receipe_image %}
+                            <img src="{{ recipe.receipe_image.url }}" alt="{{ recipe.receipe_name }}" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-column  justify-content-center align-items-center">
+                            <a href="{% url 'delete_receipe' recipe.id %}" class="btn btn-danger my-2">Delete</a>
+                            <a href="{% url 'update_receipe' recipe.id %}" class="btn btn-success">Update</a>
+                        </div>
+                    </td>
+                    
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No recipes found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

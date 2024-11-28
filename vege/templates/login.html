@@ -1,0 +1,13 @@
+<!-- Core/vege/templates/login.html -->
+<div>
+    {{ form.as_p }}
+    <label>
+        <input type="checkbox" id="showPassword"> Show Password
+    </label>
+</div>
+<script>
+    document.getElementById('showPassword').addEventListener('change', function () {
+        let passwordField = document.querySelector('input[name="password"]');
+        passwordField.type = this.checked ? 'text' : 'password';
+    });
+</script>

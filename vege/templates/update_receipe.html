@@ -1,0 +1,27 @@
+<!-- Core/vege/templates/update_receipe.html -->
+{% extends "base.html" %}
+
+{% block start %}
+<div class="container mt-5">
+    <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Update Recipe</h2>
+        <div class="mb-3">
+            <label for="receipeName" class="form-label">Recipe Name</label>
+            <input type="text" name="receipe_name" class="form-control" id="receipeName" value="{{ receipe.receipe_name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="receipeDescription" class="form-label">Recipe Description</label>
+            <textarea class="form-control" name="receipe_description" id="receipeDescription" required>{{ receipe.receipe_description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="receipeImage" class="form-label">Recipe Image</label>
+            <input type="file" name="receipe_image" class="form-control" id="receipeImage">
+            {% if receipe.receipe_image %}
+                <img src="{{ receipe.receipe_image.url }}" alt="{{ receipe.receipe_name }}" class="img-thumbnail mt-2" style="width: 100px; height: 100px;">
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Recipe</button>
+    </form>
+</div>
+{% endblock %}
