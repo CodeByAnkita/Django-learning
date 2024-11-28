@@ -11,7 +11,7 @@ urlpatterns = [
     path('', home, name="home"),
     path('contact/', contact, name="contact"),
     path('admin/', admin.site.urls),
- path('receipes/', receipes, name="receipes"),# Default route points to the recipe page
+    path('receipes/', receipes, name="receipes"),
     path('login/', login_user, name="login"),
     path('register/', register_user, name="register"),
     path('logout/', LogoutView.as_view(next_page='login'), name="logout"),

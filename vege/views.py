@@ -8,14 +8,18 @@ from .forms import RegisterForm, LoginForm
 
 def about(request):
     return render(request, 'about.html')
+
 def register_user(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()  # Save the user
             messages.success(request, "Registration successful! Redirecting to receipes...")
-            return redirect('receipes')
+            login(request, user)  # Log in the user after registration
+            return redirect('receipes')  # Redirect to receipes page
         else:
+            # Log errors to the console for debugging
+            print("Form Errors:", form.errors.as_json())
             messages.error(request, "Error in form submission. Please try again.")
     else:
         form = RegisterForm()
@@ -29,12 +33,12 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('receipes')  # Redirect to receipes page after login
+            messages.success(request, "Login successful! Redirecting to recipes...")
+            return redirect('receipes')  # Redirect to recipes page after login
         else:
             messages.error(request, "Invalid username or password.")
     
     return render(request, "login.html")
-
 
 def confirm_logout(request):
     if request.method == "POST":
